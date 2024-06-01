@@ -24,7 +24,18 @@ public class Room {
         inverseJoinColumns = @JoinColumn(name = "equipment_id")
     )
     private Set<Equipment> equipments;
+    @OneToMany(mappedBy = Reservation_.ROOM)
+    private Set<Reservation> reservations;
     private int capacity;
     private int floor;
     private int squareMeters;
+
+    public long getId() {
+        return id;
+    }
+
+    public Set<Reservation> getReservations() {
+        return reservations;
+    }
+
 }
