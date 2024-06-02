@@ -3,6 +3,9 @@ package com.example.reservation.service;
 import com.example.reservation.model.Reservation;
 import com.example.reservation.repository.ReservationRepository;
 import com.example.reservation.repository.RoomRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,6 +41,12 @@ public class ReservationService {
     @Transactional(readOnly = true)
     public Reservation getReservation(Long id) {
         return reservationRepository.findById(id).orElse(null);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<Reservation> getUserReservations(long userID, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return reservationRepository.findAllByUserId(userID, pageable);
     }
 
     @Transactional
