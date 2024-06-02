@@ -30,18 +30,7 @@ public class Reservation {
     private Set<Equipment> equipments;
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
-    public Room getRoom() {
-        return room;
-    }
-
-    public Date getStartDate() {
-        return startDate;
-    }
-
-    public Date getEndDate() {
-        return endDate;
-    }
-
+    private double price;
     public void setRoom(Room room) {
         this.room = room;
     }

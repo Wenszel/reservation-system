@@ -18,4 +18,8 @@ public interface RoomRepository extends JpaRepository<Room, Long> {
     boolean isRoomAvailable(@Param("roomId") Long roomId,
                             @Param("startDate") Date startDate,
                             @Param("endDate") Date endDate);
+
+    // This method uses JOIN FETCH to handle the N+1 requests problem
+    @Query("SELECT r FROM Room r LEFT JOIN FETCH r.reservations WHERE r.id = :id")
+    Room findRoomWithReservationsById(Long id);
 }
