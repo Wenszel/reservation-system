@@ -1,11 +1,19 @@
 package com.example.reservation.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.sql.Date;
 import java.util.Set;
 
 @Entity
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Reservation {
     @Id
     private long id;
@@ -22,7 +30,6 @@ public class Reservation {
     private Set<Equipment> equipments;
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
-
     public Room getRoom() {
         return room;
     }
