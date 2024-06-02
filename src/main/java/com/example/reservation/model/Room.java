@@ -1,10 +1,14 @@
 package com.example.reservation.model;
 
 import jakarta.persistence.*;
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Set;
 
 @Entity
+@Data
 @Table(name="Rooms")
 public class Room {
     @Id
