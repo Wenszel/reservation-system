@@ -15,4 +15,9 @@ public class Category {
     private String name;
     @ManyToMany(mappedBy = Room_.CATEGORIES)
     private Set<Room> rooms = new HashSet<>();
+
+    public void addRoom(Room room) {
+        this.rooms.add(room);
+        room.getCategories().add(this);
+    }
 }

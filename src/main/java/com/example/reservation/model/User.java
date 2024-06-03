@@ -1,15 +1,18 @@
 package com.example.reservation.model;
 
 import jakarta.persistence.*;
+import lombok.Data;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
+@Data
+@Setter
 @Table(name = "users")
 public class User {
-    @Getter
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;

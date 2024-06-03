@@ -3,6 +3,9 @@ package com.example.reservation;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+
+// dodanie przykladowych danych do tabel
+// dokonczenie addReservation w reservationController
 @SpringBootApplication
 public class ReservationApplication {
 
