@@ -2,6 +2,7 @@ package com.example.reservation.model;
 
 import jakarta.persistence.*;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -15,5 +16,5 @@ public class User {
     private String firstName;
     private String lastName;
     @OneToMany(mappedBy = Reservation_.USER)
-    private Set<Reservation> reservations;
+    private Set<Reservation> reservations = new HashSet<>();
 }
