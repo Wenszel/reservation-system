@@ -1,17 +1,16 @@
 package com.example.reservation.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.sql.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Data
 @Builder
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class Reservation {
@@ -27,21 +26,15 @@ public class Reservation {
         joinColumns = @JoinColumn(name = "reservation_id"),
         inverseJoinColumns = @JoinColumn(name = "equipment_id")
     )
-    private Set<Equipment> equipments;
+    private Set<Equipment> equipments = new HashSet<>();
+    public void addEquipment(Equipment equipment) {
+        this.equipments.add(equipment);
+        equipment.getReservations().add(this);
+    }
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
-    public Room getRoom() {
-        return room;
-    }
 
-    public Date getStartDate() {
-        return startDate;
-    }
-
-    public Date getEndDate() {
-        return endDate;
-    }
-
+    private double price;
     public void setRoom(Room room) {
         this.room = room;
     }

@@ -3,6 +3,7 @@ package com.example.reservation.model;
 import jakarta.persistence.*;
 import lombok.Getter;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -16,11 +17,11 @@ public class User {
     private String password;
     private String firstName;
     private String lastName;
+
     @OneToMany(mappedBy = Reservation_.USER)
     private Set<Reservation> reservations;
 
     public void setId(long id) {
         this.id = id;
     }
-
 }
