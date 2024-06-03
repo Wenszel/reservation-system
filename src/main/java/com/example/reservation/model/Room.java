@@ -53,12 +53,7 @@ public class Room {
     private int floor;
     private int squareMeters;
 
-    public long getId() {
-        return id;
+    public void setId (long id) {
+        this.id = id;
     }
-
-    public Set<Reservation> getReservations() {
-        return reservations;
-    }
-
 }

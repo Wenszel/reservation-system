@@ -31,9 +31,9 @@ public class Reservation {
         this.equipments.add(equipment);
         equipment.getReservations().add(this);
     }
-
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
+
     private double price;
     public void setRoom(Room room) {
         this.room = room;
