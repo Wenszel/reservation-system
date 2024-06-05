@@ -53,6 +53,8 @@ public class Room {
     private int floor;
     private int squareMeters;
 
+    private double priceByDay;
+
     public void setId (long id) {
         this.id = id;
     }
