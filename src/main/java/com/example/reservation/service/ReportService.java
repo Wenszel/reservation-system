@@ -2,6 +2,7 @@ package com.example.reservation.service;
 
 import com.example.reservation.dto.EquipmentReportResponse;
 import com.example.reservation.dto.ReportResponse;
+import com.example.reservation.dto.ReservationResponse;
 import com.example.reservation.model.Category;
 import com.example.reservation.model.Equipment;
 import com.example.reservation.model.Reservation;
@@ -39,7 +40,9 @@ public class ReportService {
         double total = room.getReservations().stream()
                 .map(Reservation::getPrice)
                 .reduce(0.0, Double::sum);
-        return new ReportResponse(room.getName(), room.getReservations(), total);
+        return new ReportResponse(room.getName(),
+                room.getReservations().stream().map(ReservationResponse::getReservationResponse).collect(Collectors.toSet()),
+                total);
     }
 
     @Transactional(readOnly = true)
@@ -48,7 +51,9 @@ public class ReportService {
         double total = reservations.stream()
                 .map(Reservation::getPrice)
                 .reduce(0.0, Double::sum);
-        return new ReportResponse("All rooms", reservations, total);
+        return new ReportResponse("All rooms",
+                reservations.stream().map(ReservationResponse::getReservationResponse).collect(Collectors.toSet()),
+                total);
     }
 
     @Transactional(readOnly = true)

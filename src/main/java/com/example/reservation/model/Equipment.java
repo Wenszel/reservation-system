@@ -22,8 +22,4 @@ public class Equipment {
         this.rooms.add(room);
         room.getEquipments().add(this);
     }
-    public void addReservation(Reservation reservation) {
-        this.reservations.add(reservation);
-        reservation.getEquipments().add(this);
-    }
 }

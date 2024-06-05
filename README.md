@@ -1,3 +1,13 @@
+## Autorzy
+Maksymilian Katolik
+Wiktor Smaga
+
+## Technologie
+Hibernate, Spring Data, PostgreSQL, Java 21
+
+## Dokumentacja
+https://github.com/Wenszel/reservation-system/blob/main/dokumentacja.pdf
+
 ## How to run
 
 Pre-requisites:

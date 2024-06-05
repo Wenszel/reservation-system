@@ -1,6 +1,8 @@
 package com.example.reservation.controller;
 
 import com.example.reservation.dto.ReservationRequest;
+import com.example.reservation.dto.ReservationResponse;
+import com.example.reservation.model.Equipment;
 import com.example.reservation.model.Reservation;
 import com.example.reservation.service.ReservationService;
 import org.slf4j.Logger;
@@ -8,21 +10,25 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/reservation")
 public class ReservationController {
     private static final Logger logger = LoggerFactory.getLogger(ReservationController.class);
-
     private final ReservationService reservationService;
     @Autowired
     public ReservationController(ReservationService reservationService) {
         this.reservationService = reservationService;
     }
+
     @PostMapping("/add")
+    @Transactional
     public ResponseEntity<String> addReservation(@RequestBody ReservationRequest reservationRequest) {
         try {
             Reservation reservation = reservationService.createReservation(reservationRequest);
@@ -34,7 +40,7 @@ public class ReservationController {
         }
     }
     // oprocz /add jeszcze /delete i /get i /update
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteReservation(@PathVariable long id) {
         try {
             reservationService.deleteReservation(id);
@@ -45,12 +51,25 @@ public class ReservationController {
         }
     }
 
-    @GetMapping("/get/{id}")
+    @GetMapping("/page")
+    public ResponseEntity<?> getPageOfReservations(@RequestParam int userId, @RequestParam int page, @RequestParam int size) {
+        try {
+            List<ReservationResponse> responses = reservationService.getUserReservations(userId, page, size).getContent().stream().map(ReservationResponse::getReservationResponse).toList();
+
+            return new ResponseEntity<>(responses, HttpStatus.OK);
+        } catch (Exception e) {
+            logger.error("Failed to get page of reservations", e);
+            return new ResponseEntity<>("Failed to get page of reservations: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+
+    @GetMapping("/{id}")
     public ResponseEntity<?> getReservationById(@PathVariable long id) {
         try {
             Optional<Reservation> reservation = reservationService.getReservationById(id);
             if (reservation.isPresent()) {
-                return new ResponseEntity<>(reservation.get(), HttpStatus.OK);
+                return new ResponseEntity<>(ReservationResponse.getReservationResponse(reservation.get()), HttpStatus.OK);
             } else {
                 return new ResponseEntity<>("Reservation not found", HttpStatus.NOT_FOUND);
             }
@@ -60,7 +79,9 @@ public class ReservationController {
         }
     }
 
-    @PutMapping("/update/{id}")
+
+
+    @PutMapping("/{id}")
     public ResponseEntity<String> updateReservation(@PathVariable long id, @RequestBody ReservationRequest reservationRequest) {
         try {
             reservationService.updateReservation(id, reservationRequest);

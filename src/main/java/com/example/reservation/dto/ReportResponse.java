@@ -11,6 +11,6 @@ import java.util.Set;
 @AllArgsConstructor
 public class ReportResponse {
     public String name;
-    public Set<Reservation> reservations;
+    public Set<ReservationResponse> reservations;
     public double totalPrice;
 }

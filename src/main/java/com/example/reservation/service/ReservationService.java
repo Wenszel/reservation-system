@@ -46,8 +46,9 @@ public class ReservationService {
         reservationRepository.save(reservation);
     }
 
+    @Transactional
     public Reservation createReservation(ReservationRequest reservationRequest) {
-        Room room = roomRepository.findById(reservationRequest.getRoomId())
+        Room room = roomRepository.findByIdLocked(reservationRequest.getRoomId())
                 .orElseThrow(() -> new IllegalArgumentException("Room not found"));
 
         User user = userRepository.findById(reservationRequest.getUserId())
@@ -80,6 +81,34 @@ public class ReservationService {
             throw new IllegalArgumentException("Reservation not found");
         }
         reservationRepository.deleteById(reservationId);
+    }
+
+    @Transactional
+    public void updateReservation(long reservationId, ReservationRequest reservationRequest) {
+        Reservation reservation = reservationRepository.findById(reservationId)
+                .orElseThrow(() -> new IllegalArgumentException("Reservation not found"));
+
+        Room room = roomRepository.findById(reservationRequest.getRoomId())
+                .orElseThrow(() -> new IllegalArgumentException("Room not found"));
+
+        User user = userRepository.findById(reservationRequest.getUserId())
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+
+        Set<Equipment> equipments = new HashSet<>();
+        for (Long equipmentId : reservationRequest.getEquipmentsId()) {
+            Equipment equipment = equipmentRepository.findById(equipmentId)
+                    .orElseThrow(() -> new IllegalArgumentException("Equipment not found"));
+            equipments.add(equipment);
+        }
+
+        reservation.setRoom(room);
+        reservation.setUser(user);
+        reservation.setStartDate(reservationRequest.getStartDate());
+        reservation.setEndDate(reservationRequest.getEndDate());
+        reservation.setEquipments(equipments);
+
+        double price = room.getPriceByDay() * reservation.getDays(reservationRequest.getStartDate(), reservationRequest.getEndDate());
+        reservation.setPrice(price);
     }
 
     @Transactional(readOnly = true)
@@ -118,33 +147,5 @@ public class ReservationService {
 //        return reservationRepository.findById(roomId);
 //    }
 
-    @Transactional
-    public void updateReservation(long reservationId, ReservationRequest reservationRequest) {
-        Reservation reservation = reservationRepository.findById(reservationId)
-                .orElseThrow(() -> new IllegalArgumentException("Reservation not found"));
 
-        Room room = roomRepository.findById(reservationRequest.getRoomId())
-                .orElseThrow(() -> new IllegalArgumentException("Room not found"));
-
-        User user = userRepository.findById(reservationRequest.getUserId())
-                .orElseThrow(() -> new IllegalArgumentException("User not found"));
-
-        Set<Equipment> equipments = new HashSet<>();
-        for (Long equipmentId : reservationRequest.getEquipmentsId()) {
-            Equipment equipment = equipmentRepository.findById(equipmentId)
-                    .orElseThrow(() -> new IllegalArgumentException("Equipment not found"));
-            equipments.add(equipment);
-        }
-
-        reservation.setRoom(room);
-        reservation.setUser(user);
-        reservation.setStartDate(reservationRequest.getStartDate());
-        reservation.setEndDate(reservationRequest.getEndDate());
-        reservation.setEquipments(equipments);
-
-        double price = room.getPriceByDay() * reservation.getDays(reservationRequest.getStartDate(), reservationRequest.getEndDate());
-        reservation.setPrice(price);
-
-        reservationRepository.save(reservation);
-    }
 }

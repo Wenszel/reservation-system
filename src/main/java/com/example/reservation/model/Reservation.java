@@ -17,6 +17,7 @@ import java.util.Set;
 @AllArgsConstructor
 public class Reservation {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     @ManyToOne(fetch = FetchType.LAZY)
     private Room room;
